@@ -7,7 +7,7 @@ import cv2
 #import scipy.misc as misc
 
 #-------------------------------------Input parameters-----------------------------------------------------------------------
-InputDir="../images" # Folder of input images
+InputDir="./InputImages" # Folder of input images
 OutDir="output/" # Folder of output
 
 UseGPU=False # Use GPU or CPU  for prediction (GPU faster but demend nvidia GPU and CUDA installed else set UseGPU to False)
