@@ -7,7 +7,7 @@ import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
 # FCN Net model class for semantic segmentation
-##############################################This is a standart FCN with the lat layer split into prediction of binary map for every class########################################################################333
+#This is a standart FCN with the lat layer split into prediction of binary map for every class
 class Net(nn.Module):
 ######################################Build FCN net layer##################################################################################
     def __init__(self, CatDict):

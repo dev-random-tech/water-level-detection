@@ -1,4 +1,4 @@
-#Run  trained net on video to generate prediction and write to another video
+#Run  net on webcam to overlay  prediction image  on and display  on screen
 #...............................Imports..................................................................
 
 import os
@@ -11,9 +11,9 @@ import cv2
 
 ############################################Input parameters###################################################################################
 #-------------------------------------Input parameters-----------------------------------------------------------------------
-InputVideo=r"./videos/2.mp4" #input video
-OutVideoMain=InputVideo[:-4]+"_MainClasses.avi" #Output video that contain vessel filled  liquid and solid
-OutVideoAll=InputVideo[:-4]+"_AllClasses.avi"#Output video that contain subclasses that have more then 5% of the image
+#InputVideo=r"C:\Users\Sagi\Documents\2020.1.28_lab_captures\1580404054104.mp4" # Input Video
+#OutVideoMain=InputVideo[:-4]+"_MainClasses.avi" #Output video that contain vessel filled  liquid and solid
+#OutVideoAll=InputVideo[:-4]+"_AllClasses.avi"#Output video that contain subclasses that have more then 5% of the image
 UseGPU=False # Use GPU or CPU  for prediction (GPU faster but demend nvidia GPU and CUDA installed else set UseGPU to False)
 FreezeBatchNormStatistics=False # wether to freeze the batch statics on prediction  setting this true or false might change the prediction mostly False work better
 OutEnding="" # Add This to file name
@@ -31,7 +31,7 @@ else:
     print("USING CPU")
     Net.load_state_dict(torch.load(Trained_model_path, map_location=torch.device('cpu')))
 #---------------------OPEN video-----------------------------------------------------------------------------------------------------
-cap = cv2.VideoCapture(InputVideo)
+cap = cv2.VideoCapture(0)
 fourcc = cv2.VideoWriter_fourcc(*"MJPG")
 MainCatsVideoWriter=None
 AllCatsVideoWriter=None
@@ -47,7 +47,7 @@ while (cap.isOpened()):
     # ..................Read and resize image...............................................................................
 
     ret, Im = cap.read()
-    if ret == False: break
+    if ret == False: continue
         # Display the resulting frame
 
     h,w,d=Im.shape
@@ -88,16 +88,16 @@ while (cap.isOpened()):
             y+=1
     h,w,d=OutMain.shape
     r = np.max([h, w])
-    if r>1600: # Image larger then 840X840 are shrinked (this is not essential, but the net results might degrade when using to large images
-        fr=1600/r
+    if r>1000: # Image larger then 840X840 are shrinked (this is not essential, but the net results might degrade when using to large images
+        fr=1000/r
         OutMain=cv2.resize(OutMain,(int(w*fr),int(h*fr)))
     h, w, d = OutMain.shape
     cv2.imshow('Main Classes', OutMain)
     cv2.waitKey(25)
-    if MainCatsVideoWriter is None:
-        h, w, d = OutMain.shape
-        MainCatsVideoWriter = cv2.VideoWriter(OutVideoMain, fourcc, 20.0, (w, h))
-    MainCatsVideoWriter.write(OutMain)
+    # if MainCatsVideoWriter is None:
+    #     h, w, d = OutMain.shape
+    #     MainCatsVideoWriter = cv2.VideoWriter(OutVideoMain, fourcc, 20.0, (w, h))
+    # MainCatsVideoWriter.write(OutMain)
 #------------------------------------Display all classes on the image----------------------------------------------------------------------------------
     h, w, d = Im.shape
     my=3
@@ -111,7 +111,7 @@ while (cap.isOpened()):
     VesMat = OutLbDict['Vessel'].data.cpu().numpy()[0].astype(np.uint8)
     for nm in AllCatName:
         Lb=OutLbDict[nm].data.cpu().numpy()[0].astype(np.uint8)
-        if Lb.mean()<0.0002: continue
+        if Lb.mean()<0.0005: continue
         if nm=='Ignore': continue
         font = cv2.FONT_HERSHEY_SIMPLEX
 
@@ -130,12 +130,12 @@ while (cap.isOpened()):
     if r>1800: # Image larger then 840X840 are shrinked (this is not essential, but the net results might degrade when using to large images
         fr=1800/r
         OutMain=cv2.resize(OutMain,(int(w*fr),int(h*fr)))
-    cv2.imshow('All Classes', OutMain)
-    cv2.waitKey(25)
-    if AllCatsVideoWriter is None:
-       h, w, d = OutMain.shape
-       AllCatsVideoWriter = cv2.VideoWriter(OutVideoAll, fourcc, 20.0, (w, h))
-    AllCatsVideoWriter.write(OutMain)
+  #  cv2.imshow('All Classes', OutMain)
+  #  cv2.waitKey(25)
+#    if AllCatsVideoWriter is None:
+#       h, w, d = OutMain.shape
+#       AllCatsVideoWriter = cv2.VideoWriter(OutVideoAll, fourcc, 20.0, (w, h))
+#    AllCatsVideoWriter.write(OutMain)
 #-----------------------------------------------------------------------------------------------------------------------------
 print("Finished")
 AllCatsVideoWriter.release()
