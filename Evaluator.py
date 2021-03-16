@@ -8,8 +8,8 @@ import threading
 import random
 import ChemReader as ChemReader
 import torch
-######################Class used for evaluating net accuracy######################################################################################
-#########################################################################################################################
+#Class used for evaluating net accuracy
+
 class Evaluator:
     def __init__(self, AnnDir,OutFile):
         self.AnnDir = AnnDir

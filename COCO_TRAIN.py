@@ -30,8 +30,6 @@ TrainedModelWeightDir="logs_COCO/" # Folder where trained model weight and infor
 if not os.path.exists(TrainedModelWeightDir): os.mkdir(TrainedModelWeightDir)
 Trained_model_path="" # Path of trained model weights If you want to return to trained model, else should be =""
 
-
-
 #-----------------------------------------Training parameters---------------------------------------------------------------------
 Learning_Rate_Init=1e-5 # Initial learning rate
 Learning_Rate=1e-5 # learning rate

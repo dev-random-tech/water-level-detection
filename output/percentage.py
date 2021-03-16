@@ -3,8 +3,8 @@ import cv2 as cv
 from PIL import Image 
 
 #img = cv.imread("./Filled/test9.png")
-im = np.array(Image.open("./Filled/test6.png").convert("RGB"))
-im2 = np.array(Image.open("./Vessel/test6.png").convert("RGB"))
+im = np.array(Image.open("./Filled/test8.png").convert("RGB"))
+im2 = np.array(Image.open("./Vessel/test8.png").convert("RGB"))
  
 sought = [255,0,255]
 
